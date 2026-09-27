@@ -2,7 +2,7 @@ from slrresearch.config import Settings, build_model, resolve_decoding
 from slrresearch.research_questions import generate_questions
 
 # PARTIE 2 — Modifier uniquement ces valeurs pour comparer les décodages.
-DECODING_MODE = "greedy"         # TODO 2.1 : essayer ensuite "sampling"
+DECODING_MODE = "sampling"         # TODO 2.1 : essayer ensuite "sampling"
 SAMPLING_TEMPERATURE = 0.8     # TODO 2.2 : comparer ensuite 0.2 et 0.8
 TOP_P = 0.9                    # utilisée seulement en mode sampling
 MAX_OUTPUT_TOKENS = 400
