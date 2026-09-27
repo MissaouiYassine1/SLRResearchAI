@@ -57,7 +57,10 @@ def build_zero_shot_prompt(topic: str) -> str:
 def build_zero_shot_messages(topic: str) -> list[SystemMessage | HumanMessage]:
     """TODO 1.3 — Construire [SystemMessage, HumanMessage]."""
     # Remplacer les deux chaînes par les appels aux fonctions précédentes.
-    return [SystemMessage(content="..."), HumanMessage(content="...")]
+    return [
+        SystemMessage(content=build_system_prompt()),
+        HumanMessage(content=build_user_prompt(topic)),
+    ]
     
 
 def _observable_metadata(response) -> tuple[int | None, int | None, str | None]:
