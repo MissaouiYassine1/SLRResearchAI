@@ -34,19 +34,19 @@ def build_user_prompt(topic: str) -> str:
     if not clean_topic:
         raise ValueError("Sujet vide")
     return f"""[OBJECTIF]
-TODO : indiquer l'action attendue tout en insistant sur la pertinance et le focus.
+Formule des questions de recherche pertinentes et strictement centrées sur le sujet fourni, sans t'écarter vers des thématiques connexes non demandées.
 
 [CONTEXTE]
-TODO : expliquer l'usage futur des questions à générer.
+Ces questions serviront de point de départ à une recherche bibliographique systématique : elles guideront la sélection des articles scientifiques et la définition des critères d'inclusion.
 
 [ENTRÉE]
 Sujet de la revue : {clean_topic}
 
 [CONTRAINTES]
-TODO : préciser le nombre et les caractéristiques des questions ainsi que les interdictions.
+Propose entre 3 et 5 questions, ouvertes (pas de réponse par oui/non) et distinctes les unes des autres. N'utilise aucun format JSON ni balisage structuré. N'invente aucune donnée, référence ou statistique.
 
 [SORTIE ATTENDUE]
-TODO : préciser une liste RQ1., RQ2., etc., en texte libre."""
+Retourne uniquement une liste en texte libre, chaque question précédée de sa numérotation au format RQ1., RQ2., RQ3., etc."""
 
 
 def build_zero_shot_prompt(topic: str) -> str:
