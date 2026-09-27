@@ -78,13 +78,20 @@ def generate_questions(model, topic: str, provider: str = "demo") -> FreeTextQue
     messages = build_zero_shot_messages(topic)
     started = perf_counter()
 
-    # TODO : remplacer None par UN appel model.invoke(messages).
-    response = None    # type de retour de invoke est AImessage
+    response = model.invoke(messages)    # type de retour de invoke est AImessage
 
     latency = perf_counter() - started
-    # TODO : lire et nettoyer response.content.
-    text = "" 
+
+    text = str(response.content).strip() 
     input_tokens, output_tokens, finish_reason = _observable_metadata(response)
 
-    # TODO : remplacer ce bloc par FreeTextQuestions(...) avec tous les champs.
-    raise NotImplementedError("Complétez le TODO 1.4")
+    return FreeTextQuestions(
+        text=text,
+        provider=provider,
+        latency_seconds=latency,
+        system_prompt=str(messages[0].content),
+        user_prompt=str(messages[1].content),
+        input_tokens=input_tokens,
+        output_tokens=output_tokens,
+        finish_reason=finish_reason,
+    )
