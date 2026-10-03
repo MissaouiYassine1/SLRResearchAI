@@ -141,8 +141,7 @@ def validate_questions(records: list[dict]) -> list[ResearchQuestion]:
     """TODO 4 - Appliquer le contrat Pydantic à chaque dictionnaire."""
     questions = []
     for record in records:
-        # TODO 4 - Remplacer None par l'appel Pydantic indiqué dans l'énoncé.
-        question = None
+        question = ResearchQuestion.model_validate(record)
         questions.append(question)
     return questions
      
