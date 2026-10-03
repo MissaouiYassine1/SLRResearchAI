@@ -57,7 +57,12 @@ def parse_rq_line(line: str) -> dict:
 
 def validate_identifiers(records: list[dict]) -> None:
     """TODO 1.3 - Exiger exactement RQ1, RQ2, RQ3 dans cet ordre."""
-    raise NotImplementedError
+    identifiers = [record["identifier"] for record in records]
+    if identifiers != ["RQ1", "RQ2", "RQ3"]:
+        raise ValueError(
+            f"Identifiants invalides : {identifiers}"
+        )
+    
 
 
 def validate_no_duplicates(records: list[dict]) -> None:
