@@ -1,6 +1,7 @@
 import re
 from typing import Literal
 
+from bleach import clean
 from langchain_core.runnables import RunnableLambda
 from pydantic import BaseModel, Field
 
@@ -83,7 +84,24 @@ def validate_free_text(text: str) -> list[dict]:
 
 def build_few_shot_prompt(topic: str) -> str:
     """TODO 2 - Ajouter deux exemples sans modifier le validateur."""
-    raise NotImplementedError
+    clean = topic.strip()
+    if not clean:
+        raise ValueError("Sujet vide")
+    return f"""Propose exactement trois questions de recherche.
+    N'ajoute ni introduction, ni conclusion, ni JSON.
+
+    Exemple 1 - Sujet : ...
+    RQ1. ...
+    RQ2. ...
+    RQ3. ...
+
+    Exemple 2 - Sujet : ...
+    RQ1. ...
+    RQ2. ...
+    RQ3. ...
+
+    Sujet courant : {clean}
+    Retourne exactement trois lignes RQ1., RQ2. et RQ3."""
 
 
 def build_repair_prompt(text: str, error: str) -> str:
