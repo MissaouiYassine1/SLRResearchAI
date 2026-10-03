@@ -75,8 +75,11 @@ def validate_no_duplicates(records: list[dict]) -> None:
 
 def validate_free_text(text: str) -> list[dict]:
     """TODO 1.5 - Composer les quatre contrôles textuels précédents."""
-    raise NotImplementedError
-
+    non_empty_lines = extract_non_empty_lines(text)
+    records = [parse_rq_line(line) for line in non_empty_lines]
+    validate_identifiers(records)
+    validate_no_duplicates(records)
+    return records
 
 def build_few_shot_prompt(topic: str) -> str:
     """TODO 2 - Ajouter deux exemples sans modifier le validateur."""
