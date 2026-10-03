@@ -165,10 +165,9 @@ def build_queries(questions: list[ResearchQuestion]) -> dict[str, str]:
 
 def build_question_pipeline():
     """TODO 6 - Composer regex | Pydantic | requêtes avec LCEL."""
-    # TODO 6 - Remplacer chaque fonction identité par la fonction du bon stade.
-    text_control = RunnableLambda(lambda value: value)
-    data_contract = RunnableLambda(lambda value: value)
-    query_builder = RunnableLambda(lambda value: value)
+    text_control = RunnableLambda(validate_free_text)
+    data_contract = RunnableLambda(validate_questions)
+    query_builder = RunnableLambda(build_queries)
     return text_control | data_contract | query_builder
 
 
