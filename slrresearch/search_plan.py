@@ -146,7 +146,6 @@ def validate_questions(records: list[dict]) -> list[ResearchQuestion]:
     return questions
      
 
-
 def build_queries(questions: list[ResearchQuestion]) -> dict[str, str]:
     """TODO 5 - Produire synonymes OR, concepts AND."""
     if not questions:
@@ -154,8 +153,7 @@ def build_queries(questions: list[ResearchQuestion]) -> dict[str, str]:
     combinations = []
     for task in SEARCH_CONCEPTS["task"]:
         for technology in SEARCH_CONCEPTS["technology"]:
-            # TODO 5 - Construire ici ("task" AND "technology").
-            expression = ""
+            expression = f'("{task}" AND "{technology}")'
             combinations.append(expression)
     base_query = " OR ".join(combinations)
     return {
