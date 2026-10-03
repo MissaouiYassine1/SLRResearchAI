@@ -106,7 +106,30 @@ def build_few_shot_prompt(topic: str) -> str:
 
 def build_repair_prompt(text: str, error: str) -> str:
     """TODO 3 - Demander une correction de forme ciblée."""
-    raise NotImplementedError
+    def build_repair_prompt(text: str, error: str) -> str:
+        return f"""Tu corriges la forme d'une sortie destinée à un programme.
+            [TÂCHE]
+            Corrige uniquement la forme du texte à corriger.
+            Préserve le sens exact de chaque question, sans en inventer de nouvelles.
+
+            [ERREUR DÉTECTÉE]
+            {error}
+
+            [CONTRAT ATTENDU]
+            - Exactement trois lignes, une par question.
+            - Chaque ligne commence par RQ1., RQ2. ou RQ3. dans cet ordre.
+            - N'ajoute ni introduction, ni explication, ni Markdown, ni JSON.
+
+            [EXEMPLE CONFORME]
+            RQ1. Comment l'IA influence-t-elle la personnalisation pédagogique ?
+            RQ2. Quels risques l'IA introduit-elle dans l'évaluation ?
+            RQ3. Quel contrôle humain doit-il être conservé ?
+
+            [TEXTE À CORRIGER]
+            {text}
+
+            [SORTIE]
+            Retourne uniquement les trois lignes RQ1., RQ2. et RQ3. corrigées."""
 
 
 def repair_with_llm(model, text: str, error: str) -> str:
