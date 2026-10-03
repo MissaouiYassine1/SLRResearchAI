@@ -35,12 +35,25 @@ SEARCH_CONCEPTS = {
 
 def extract_non_empty_lines(text: str) -> list[str]:
     """TODO 1.1 - Nettoyer le texte et retourner les lignes non vides."""
-    raise NotImplementedError
+    lines = [
+        line.strip()
+        for line in text.strip().splitlines()
+        if line.strip()
+    ]
+    if not lines:
+        raise ValueError("Texte vide")
+    return lines
 
 
 def parse_rq_line(line: str) -> dict:
     """TODO 1.2 - Contrôler toute la ligne avec RQ_PATTERN.fullmatch."""
-    raise NotImplementedError
+    match = RQ_PATTERN.fullmatch(line)
+    if match == None:
+        raise ValueError(f"Ligne invalide : {line}")
+    return {
+                "identifier": match.group(1),
+                "question": match.group(2).strip(), 
+            }
 
 def validate_identifiers(records: list[dict]) -> None:
     """TODO 1.3 - Exiger exactement RQ1, RQ2, RQ3 dans cet ordre."""
