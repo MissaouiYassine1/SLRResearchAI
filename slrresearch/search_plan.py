@@ -67,7 +67,10 @@ def validate_identifiers(records: list[dict]) -> None:
 
 def validate_no_duplicates(records: list[dict]) -> None:
     """TODO 1.4 - Refuser deux formulations identiques."""
-    raise NotImplementedError
+    questions = [record["question"] for record in records]
+    unique_questions = set(questions)
+    if len(questions) != len(unique_questions):
+        raise ValueError("Les trois questions doivent être différentes")
 
 
 def validate_free_text(text: str) -> list[dict]:
