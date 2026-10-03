@@ -193,16 +193,9 @@ def run_controlled_workflow(model, text: str) -> WorkflowOutcome:
             str(first_error),
         )
         try:
-            # TODO 7.1 — Revalider la réponse produite par le repair.
-            #
-            # Ligne 1 : appeler validate_free_text(repaired_text) et ranger
-            #           son résultat dans repaired_records.
-            # Ligne 2 : appeler validate_questions(repaired_records) et ranger
-            #           son résultat dans repaired_questions.
-            #
-            # Vous devez donc remplacer uniquement les deux valeurs None.
-            repaired_records = None
-            repaired_questions = None
+            # TODO 7.1
+            repaired_records = validate_free_text(repaired_text)
+            repaired_questions = validate_questions(repaired_records)
 
             return WorkflowOutcome(
                 status="repaired",
@@ -213,11 +206,9 @@ def run_controlled_workflow(model, text: str) -> WorkflowOutcome:
             )
 
         except ValueError as second_error:
-            # TODO 7.2 — Le texte réparé vient d'échouer à son tour.
-            # Remplacer uniquement "accepted" par "human_required".
-            # Ne modifiez aucune autre ligne et ne rappelez pas le LLM.
+            # TODO 7.2
             return WorkflowOutcome(
-                status="accepted",
+                status="human_required",
                 text=repaired_text,
                 questions=[],
                 repair_attempts=1,
