@@ -32,7 +32,9 @@ class ToolRegistry:
     def authorize(self, tool_name: str | None) -> SearchTool:
         """TODO 2 - Retourner seulement un outil enregistré."""
         # Refuser None et tout nom absent avec ToolNotAllowedError.
-        raise NotImplementedError
+        if tool_name is None or tool_name not in self._tools:
+            raise ToolNotAllowedError(f"Outil non autorisé : {tool_name}")
+        return self._tools[tool_name]
 
 
 def load_catalog_backend(path: Path, source: str) -> SearchCallable:
