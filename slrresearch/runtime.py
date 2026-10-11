@@ -15,7 +15,7 @@ def execute_authorized_action(
     started = perf_counter()
     try:
         # TODO 4.1 — Méthode du Registry vue dans le cours.
-        tool = registry.________________(action.tool)
+        tool = registry.authorize(action.tool)
     except ToolNotAllowedError as exc:
         return Observation(
             tool=action.tool,
@@ -26,7 +26,7 @@ def execute_authorized_action(
 
     try:
         # TODO 4.2 — Fonction portée par SearchTool.
-        raw_papers = tool.________________(
+        raw_papers = tool.search(
             action.query or "", action.limit or 1
         )
         papers = [
