@@ -1,0 +1,39 @@
+[
+  {
+    "id": "OA-01",
+    "title": "Large language models for systematic review screening",
+    "abstract": "A study of recall and human oversight in title and abstract screening.",
+    "doi": "10.1000/slr.001",
+    "url": "https://example.org/oa-01",
+    "open_access": true,
+    "source": "openalex"
+  },
+  {
+    "id": "CR-01",
+    "title": "Large language models for systematic review screening",
+    "abstract": "The same article indexed by a second source.",
+    "doi": "10.1000/slr.001",
+    "url": "https://example.org/cr-01",
+    "open_access": true,
+    "source": "crossref"
+  },
+  {
+    "id": "CR-02",
+    "title": "Human oversight of AI-assisted study selection",
+    "abstract": "Uncertainty and human validation remain necessary.",
+    "doi": "10.1000/slr.002",
+    "url": "https://example.org/cr-02",
+    "open_access": false,
+    "source": "crossref"
+  },
+  {
+    "id": "SS-01",
+    "title": "Generative AI for title and abstract screening",
+    "abstract": "Evaluation of recall in software engineering reviews.",
+    "doi": "10.1000/slr.003",
+    "url": "https://example.org/ss-01",
+    "open_access": true,
+    "source": "semantic_scholar"
+  }
+]
+

@@ -1,64 +1,39 @@
-import os
 from dataclasses import dataclass
+from os import getenv
 
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
 
 @dataclass(frozen=True)
 class Settings:
-    provider: str = os.getenv("LLM_PROVIDER", "ollama").lower()
-    ollama_model: str = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
-    ollama_base_url: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-    groq_api_key: str = os.getenv("GROQ_API_KEY", "")
-    groq_model: str = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
+    provider: str = getenv("LLM_PROVIDER", "ollama").strip().lower()
+    ollama_model: str = getenv("OLLAMA_MODEL", "llama3.1:8b")
+    ollama_base_url: str = getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+    groq_api_key: str = getenv("GROQ_API_KEY", "")
+    groq_model: str = getenv("GROQ_MODEL", "openai/gpt-oss-20b")
 
 
-@dataclass(frozen=True)
-class DecodingParameters:
-    mode: str
-    temperature: float
-    top_p: float
-    top_k: int | None
-    max_output_tokens: int
+def build_model(settings: Settings):
+    if settings.provider == "groq":
+        if not settings.groq_api_key:
+            raise ValueError("GROQ_API_KEY manque dans .env")
+        from langchain_groq import ChatGroq
 
-
-def resolve_decoding(mode: str, sampling_temperature: float = 0.8,
-                     top_p: float = 0.9, max_output_tokens: int = 400
-                     ) -> DecodingParameters:
-    """Traduit le choix conceptuel en paramètres communs aux fournisseurs."""
-    clean_mode = mode.strip().lower()
-    if clean_mode == "greedy":
-        # Groq : approximation quasi-greedy ; Ollama : top_k=1 renforce ce choix.
-        return DecodingParameters("greedy", 0.0, 1.0, 1, max_output_tokens)
-    if clean_mode == "sampling":
-        return DecodingParameters(
-            "sampling", sampling_temperature, top_p, 40, max_output_tokens
+        return ChatGroq(
+            api_key=settings.groq_api_key,
+            model=settings.groq_model,
+            temperature=0,
         )
-    raise ValueError("DECODING_MODE doit être 'greedy' ou 'sampling'")
-
-
-def build_model(settings: Settings, decoding: DecodingParameters):
     if settings.provider == "ollama":
         from langchain_ollama import ChatOllama
+
         return ChatOllama(
             model=settings.ollama_model,
             base_url=settings.ollama_base_url,
-            temperature=decoding.temperature,
-            top_p=decoding.top_p,
-            top_k=decoding.top_k,
-            num_predict=decoding.max_output_tokens,
+            temperature=0,
         )
-    if settings.provider == "groq":
-        if not settings.groq_api_key:
-            raise ValueError("GROQ_API_KEY manquante")
-        from langchain_groq import ChatGroq
-        return ChatGroq(
-            model=settings.groq_model,
-            api_key=settings.groq_api_key,
-            temperature=decoding.temperature,
-            max_tokens=decoding.max_output_tokens,
-            model_kwargs={"top_p": decoding.top_p},
-        )
-    raise ValueError("LLM_PROVIDER doit être ollama ou groq")
+    raise ValueError("LLM_PROVIDER doit valoir groq ou ollama")
+

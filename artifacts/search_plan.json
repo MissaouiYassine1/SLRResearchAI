@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "origin": "pedagogical_seed",
+  "produced_by": "TD02",
+  "topic": "Utilisation des LLM pour assister le screening des SLR en génie logiciel",
+  "questions": [
+    {
+      "identifier": "RQ1",
+      "question": "Comment les LLM améliorent-ils le rappel du screening ?"
+    },
+    {
+      "identifier": "RQ2",
+      "question": "Quel contrôle humain doit-il être conservé ?"
+    },
+    {
+      "identifier": "RQ3",
+      "question": "Quelles métriques évaluent-elles cette amélioration ?"
+    }
+  ],
+  "queries": {
+    "openalex": "(\"systematic review screening\" AND \"large language models\") OR (\"study selection\" AND \"LLM\") OR (\"title and abstract screening\" AND \"generative AI\")",
+    "crossref": "(\"systematic review screening\" AND \"large language models\") OR (\"study selection\" AND \"LLM\") OR (\"title and abstract screening\" AND \"generative AI\")",
+    "semantic_scholar": "(\"systematic review screening\" AND \"large language models\") OR (\"study selection\" AND \"LLM\") OR (\"title and abstract screening\" AND \"generative AI\")"
+  }
+}

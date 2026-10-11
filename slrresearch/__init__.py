@@ -1,1 +1,2 @@
-"""SLRResearchAI, parcours agentique cumulatif."""
+"""SLRResearchAI - TD03 : workflow outillé et agent ReAct contrôlé."""
+

@@ -1,41 +1,52 @@
-from slrresearch.config import Settings, build_model, resolve_decoding
-from slrresearch.research_questions import generate_questions
+from slrresearch.demo import build_demo_policy, build_demo_registry
+from slrresearch.handoff import DEFAULT_ARTIFACT_PATH, load_search_plan
+from slrresearch.react_agent import run_react_agent
+from slrresearch.workflow import run_tool_workflow
 
-# PARTIE 2 — Modifier uniquement ces valeurs pour comparer les décodages.
-DECODING_MODE = "sampling"         # TODO 2.1 : essayer ensuite "sampling"
-SAMPLING_TEMPERATURE = 0.8     # TODO 2.2 : comparer ensuite 0.2 et 0.8
-TOP_P = 0.9                    # utilisée seulement en mode sampling
-MAX_OUTPUT_TOKENS = 400
+
+OBJECTIVE = "Trouver des études sur les LLM pour le screening des SLR"
+
+
+def print_trace(label, state):
+    print(f"\n=== {label} ===")
+    for event in state.trace:
+        print(
+            f"étape={event.step} "
+            f"action={event.action.get('action')} "
+            f"outil={event.action.get('tool')} "
+            f"observation={event.observation.status} "
+            f"articles={event.observation.count}"
+        )
+    print("arrêt :", state.stop_reason)
+    print("articles uniques :", len(state.papers))
 
 
 def main():
-    settings = Settings()
-    model_name = (
-        settings.ollama_model
-        if settings.provider == "ollama"
-        else settings.groq_model
+    artifact = load_search_plan()
+    queries = artifact.queries
+    print("=== OUTPUT TD02 → INPUT TD03 ===")
+    print("fichier :", DEFAULT_ARTIFACT_PATH)
+    print("origine :", artifact.origin)
+    print("sujet :", artifact.topic)
+    for tool, query in queries.items():
+        print(f"{tool}: {query}")
+
+    workflow_state = run_tool_workflow(
+        OBJECTIVE,
+        queries,
+        build_demo_registry(simulate_429=True),
     )
-    decoding = resolve_decoding(
-        mode=DECODING_MODE,
-        sampling_temperature=SAMPLING_TEMPERATURE,
-        top_p=TOP_P,
-        max_output_tokens=MAX_OUTPUT_TOKENS,
+    print_trace("VERSION A - WORKFLOW OUTILLÉ", workflow_state)
+
+    react_state = run_react_agent(
+        OBJECTIVE,
+        queries,
+        build_demo_registry(simulate_429=True),
+        build_demo_policy(queries),
+        max_steps=5,
+        target_papers=99,
     )
-    print(f"Mode LLM réel : {settings.provider} / {model_name}")
-    print(
-        f"Décodage : {decoding.mode} | température effective : "
-        f"{decoding.temperature} | top_p : {decoding.top_p}"
-    )
-    topic = input("Sujet de la revue : ").strip()
-    model = build_model(settings, decoding)
-    result = generate_questions(model, topic, settings.provider)
-    print("\n=== SYSTEM PROMPT ===")
-    print(result.system_prompt)
-    print("\n=== USER PROMPT ===")
-    print(result.user_prompt)
-    print("\n=== SORTIE ===")
-    print(f"Latence : {result.latency_seconds:.2f} s")
-    print(result.text)
+    print_trace("VERSION B - AGENT ReAct CONTRÔLÉ", react_state)
 
 
 if __name__ == "__main__":
