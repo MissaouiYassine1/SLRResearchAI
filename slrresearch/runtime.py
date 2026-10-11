@@ -75,11 +75,11 @@ def update_state(
         state.actions_executed.append(action)
 
     # TODO 5.1 — Nom de la liste qui mémorise les observations.
-    state.________________.append(observation)
+    state.observations.append(observation)
 
     action_dump = raw_action or (action.model_dump() if action else {})
     # TODO 5.2 — Nom de la liste qui mémorise les couples action-observation.
-    state.________________.append(
+    state.trace.append(
         TraceEvent(step=state.step, action=action_dump, observation=observation)
     )
 
