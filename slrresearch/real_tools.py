@@ -12,10 +12,10 @@ def semantic_scholar_search(query: str, limit: int) -> list[dict]:
     """Appelle la véritable API Semantic Scholar puis normalise sa réponse."""
     # TODO 3.1 — Compléter l'URL et les paramètres indiqués dans l'énoncé.
     response = httpx.get(
-        ______________________________,
+        SEMANTIC_SCHOLAR_URL,
         params={
-            "query": ______________________________,
-            "limit": ______________________________,
+            "query": query,
+            "limit": limit,
             "fields": "title,abstract,externalIds,url,openAccessPdf",
         },
         timeout=20,
@@ -42,8 +42,8 @@ def build_real_registry() -> ToolRegistry:
     # TODO 3.2 — Associer chaque nom à sa véritable fonction de recherche.
     return ToolRegistry(
         [
-            SearchTool("openalex", ______________________________),
-            SearchTool("crossref", ______________________________),
-            SearchTool("semantic_scholar", ______________________________),
+            SearchTool("openalex", openalex_search),
+            SearchTool("crossref", crossref_search),
+            SearchTool("semantic_scholar", semantic_scholar_search),
         ]
     )
