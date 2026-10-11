@@ -28,7 +28,17 @@ class AgentAction(BaseModel):
         """TODO 1 - Appliquer les règles conditionnelles search/finish."""
         # search exige tool, query non vide et limit.
         # finish interdit ces trois arguments.
-        raise NotImplementedError
+        if self.action == "search":
+            if not self.tool:
+                raise ValueError("search exige un outil")
+            if not self.query or not self.query.strip():
+                raise ValueError("search exige une requête non vide")
+            if self.limit is None:
+                raise ValueError("search exige une limite")
+        else:
+            if self.tool is not None or self.query is not None or self.limit is not None:
+                raise ValueError("finish ne doit contenir aucun argument d'outil")
+        return self
 
 
 class Observation(BaseModel):
