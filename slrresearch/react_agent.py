@@ -25,11 +25,11 @@ def run_react_agent(
 
     for _ in range(max_steps):
         # TODO 8.1 — DÉCIDER : appeler la politique avec l'état et les noms.
-        raw_action = ______________________________(state, registry.names)
+        raw_action = decide(state, registry.names)
 
         try:
             # TODO 8.2 — VALIDER : appliquer le contrat AgentAction.
-            action = AgentAction.________________(raw_action)
+            action = AgentAction.model_validate(raw_action)
         except (ValidationError, ValueError) as exc:
             # Fourni : une décision invalide devient une observation.
             observation = Observation(
@@ -41,7 +41,7 @@ def run_react_agent(
             continue
 
         # TODO 8.3 — ARRÊTER : compléter la valeur de l'action terminale.
-        if action.action == "________________":
+        if action.action == "finish":
             state.actions_executed.append(action)
             state.step += 1
             state.finished = True
@@ -49,10 +49,10 @@ def run_react_agent(
             return state
 
         # TODO 8.4 — AGIR : appeler la frontière d'exécution contrôlée.
-        observation = ______________________________(action, registry)
+        observation = execute_authorized_action(action, registry)
 
         # TODO 8.5 — OBSERVER : mémoriser action et observation dans l'état.
-        ______________________________(state, action, observation)
+        update_state(state, action, observation)
 
         # Fourni : arrêt déterministe lorsque la cible est atteinte.
         if len(state.papers) >= target_papers:
