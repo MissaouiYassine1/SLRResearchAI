@@ -72,11 +72,11 @@ class LLMDecisionPolicy:
     def __call__(self, state: SearchState, allowed_tools: list[str]) -> dict:
         """TODO 7 - Faire proposer une action au LLM, sans l'exécuter."""
         # TODO 7.1 — Écrire l'appel model.invoke(...) vu dans le cours.
-        response = self.model.________________(
+        response = self.model.invoke(                    # 7.1
             build_decision_prompt(state, allowed_tools)
         )
         # TODO 7.2 — Extraire le dictionnaire JSON de response.content.
-        return ______________________________(str(response.content))
+        return extract_json_object(str(response.content))
 
 
 class ScriptedPolicy:
